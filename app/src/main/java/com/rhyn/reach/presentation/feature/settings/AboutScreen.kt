@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +38,7 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(24.dp)
         ) {
             AboutSection(
                 title = "Reach",
@@ -78,24 +77,26 @@ fun AboutScreen(onNavigateBack: () -> Unit) {
 
 @Composable
 fun AboutSection(title: String, icon: ImageVector, description: String) {
-    OutlinedCard(
+    Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

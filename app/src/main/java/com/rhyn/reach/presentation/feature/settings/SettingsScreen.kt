@@ -1,6 +1,5 @@
 package com.rhyn.reach.presentation.feature.settings
 
-import android.content.Context
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.rhyn.reach.core.utils.SettingsManager
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +23,7 @@ import com.rhyn.reach.core.utils.SettingsManager
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
 ) {
     val context = LocalContext.current
     var isDarkTheme by remember { mutableStateOf(SettingsManager.isDarkTheme(context)) }
@@ -34,7 +32,7 @@ fun SettingsScreen(
         try {
             val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             pInfo.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (_: PackageManager.NameNotFoundException) {
             "Unknown"
         }
     }
@@ -56,23 +54,24 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp)
+                .padding(24.dp)
         ) {
             // Theme Toggle
-            OutlinedCard(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
-                        Text("Dark Theme", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("Toggle dark mode", style = MaterialTheme.typography.bodySmall)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Dark Theme", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text("Toggle dark mode", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Switch(
                         checked = isDarkTheme,
@@ -87,44 +86,54 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Version
-            OutlinedCard(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
-                        Text("App Version", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    }
-                    Text(versionName ?: "1.0.0", color = MaterialTheme.colorScheme.primary)
+                    Text("App Version", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    Text(
+                        versionName ?: "1.0.0",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // About Reach
-            OutlinedCard(
+            Card(
                 onClick = onNavigateToAbout,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text("About Reach", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("About Reach", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
             }
 
+            Spacer(modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.height(48.dp))
 
             Button(
@@ -134,13 +143,14 @@ fun SettingsScreen(
                     .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
                     contentColor = MaterialTheme.colorScheme.onErrorContainer
-                )
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Icon(Icons.Default.PowerSettingsNew, contentDescription = "Logout")
                 Spacer(modifier = Modifier.width(12.dp))
-                Text("Logout and Disconnect", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text("Logout and Disconnect", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             }
             
             Spacer(modifier = Modifier.height(24.dp))
