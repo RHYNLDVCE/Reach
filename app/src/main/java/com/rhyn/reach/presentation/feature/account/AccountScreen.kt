@@ -1,6 +1,5 @@
 package com.rhyn.reach.presentation.feature.account
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -66,42 +65,50 @@ fun AccountScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Surface(
-                modifier = Modifier.size(110.dp),
+                modifier = Modifier.size(120.dp),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shadowElevation = 4.dp
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
+                shadowElevation = 0.dp
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Avatar",
-                        modifier = Modifier.size(60.dp),
+                        modifier = Modifier.size(72.dp),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = uiState.username,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
-            AssistChip(
+            Spacer(modifier = Modifier.height(8.dp))
+
+            SuggestionChip(
                 onClick = { },
-                label = { Text("Local Mesh Node") },
-                colors = AssistChipDefaults.assistChipColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                label = { Text("Local Mesh Node", style = MaterialTheme.typography.labelMedium) },
+                shape = RoundedCornerShape(12.dp),
+                colors = SuggestionChipDefaults.suggestionChipColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                    labelColor = MaterialTheme.colorScheme.onSecondaryContainer
+                ),
+                border = null
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // --- Cloud Backup Toggle Card ---
-            OutlinedCard(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ) {
                 Row(
                     modifier = Modifier
@@ -110,9 +117,17 @@ fun AccountScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column {
-                        Text("Cloud Backup", fontWeight = FontWeight.Bold)
-                        Text("Sync account history to cloud", style = MaterialTheme.typography.bodySmall)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "Cloud Backup",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            "Sync account history to cloud",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                     Switch(
                         checked = uiState.isBackupEnabled,
@@ -124,13 +139,15 @@ fun AccountScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // --- Connection Identity Card ---
-            OutlinedCard(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface)
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
             ) {
                 Column(
-                    modifier = Modifier.padding(32.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -139,23 +156,35 @@ fun AccountScreen(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Text(
+                        text = "Share this QR to connect with others",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
 
                     if (qrBitmap != null) {
                         Surface(
-                            modifier = Modifier.size(200.dp),
-                            shape = RoundedCornerShape(20.dp),
-                            color = Color.White
+                            modifier = Modifier
+                                .size(220.dp)
+                                .clip(RoundedCornerShape(20.dp)),
+                            color = Color.White,
+                            shadowElevation = 2.dp
                         ) {
                             Image(
                                 bitmap = qrBitmap.asImageBitmap(),
                                 contentDescription = "Identity QR Code",
-                                modifier = Modifier.padding(8.dp)
+                                modifier = Modifier.padding(16.dp)
                             )
                         }
                     } else {
-                        CircularProgressIndicator()
+                        Box(modifier = Modifier.size(220.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator(strokeWidth = 3.dp)
+                        }
                     }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
